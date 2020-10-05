@@ -20,10 +20,14 @@ public class HotelReservations
     	Hotel LakeWood = new Hotel("LakeWood", 110,90);
     	Hotel BridgeWood = new Hotel("BridgeWood",150,50);
     	Hotel RidgeWood = new Hotel("RidgeWood",220,150);
+    	LakeWood.setRating(3);
+    	BridgeWood.setRating(4);
+    	RidgeWood.setRating(5);
     	HotelChain hotelChain = new HotelChain();
     	hotelChain.addHotel(LakeWood);
     	hotelChain.addHotel(BridgeWood);
     	hotelChain.addHotel(RidgeWood);
+    	
     	hotelChain.bookCheapest();
     }
 }
