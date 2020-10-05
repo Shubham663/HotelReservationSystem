@@ -1,9 +1,15 @@
 package bridgelabz.hotelReservation;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 public class Hotel{
 	private String name;
@@ -48,35 +54,54 @@ public class Hotel{
 	@Override
 	public String toString() {
 	return ("\n\nName of hotel :" + name
-			+ "\nweek days price for regular customer" + priceRegularCustomer);
+			+ "\nprice for regular customer " + priceRegularCustomer);
 	}
 	
 }
 
 class HotelChain{
 	List<Hotel> hotelsList = new ArrayList<Hotel>();
-	public boolean addHotel() {
-		Scanner sc= new Scanner(System.in);
-		System.out.println("Enter the name for the Hotel");
-		String name = sc.nextLine();
-		System.out.println("Enter the price for regular customer");
-		try {
-			int priceRegularCustomer = sc.nextInt();
-			sc.nextLine();				//catches next line character
-			Hotel hotel = new Hotel(name, priceRegularCustomer);
-			this.hotelsList.add(hotel);
-			System.out.println("Hotel added succesfully");
-			return true;
-		}catch(InputMismatchException e) {
-			System.out.println("Value for price not correct. Error " + e.getMessage());
-			return false;
-		}catch(Exception exception) {
-			System.out.println("Unexpected exception " +exception.getMessage());
-			return false;
-		}
+	public boolean addHotel(Hotel hotel) {
+		this.hotelsList.add(hotel);
+//		System.out.println("Hotel added succesfully");
+		return true;
 	}
 	@Override
 	public String toString() {
 		return this.hotelsList.toString();
+	}
+	
+	public Hotel findCheapestHotel() {
+		if(hotelsList.size() == 0)
+			return null;
+		Hotel returnedHotel = hotelsList.get(0);
+		for(Hotel hotel : hotelsList) {
+			returnedHotel = returnedHotel.getPriceRegularCustomer() < hotel.getPriceRegularCustomer()? returnedHotel:hotel;
+		}
+		return returnedHotel;	
+	}
+	
+	public boolean bookCheapest() {
+		Scanner sc= new Scanner(System.in);
+		Date date1=null;
+		Date date2=null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+		System.out.println("Enter the start day of your stay");
+		String start = sc.nextLine();
+		System.out.println("Enter the end day of your stay");
+		String end = sc.nextLine();
+		try {
+		    date1 = dateFormat.parse(start);
+		    date2 = dateFormat.parse(end);
+		}catch(ParseException e) {
+		    e.printStackTrace();
+		    return false;
+		}
+		long difference_In_Time = date2.getTime() - date1.getTime();
+		long difference_In_Days = TimeUnit.MILLISECONDS.toDays(difference_In_Time)% 365;
+		Hotel hotel = this.findCheapestHotel();
+		System.out.println("Hotel : " + hotel.getName()
+				+ "\nTotal Rates : " +hotel.getPriceRegularCustomer()*difference_In_Days);
+		return true;
 	}
 }
