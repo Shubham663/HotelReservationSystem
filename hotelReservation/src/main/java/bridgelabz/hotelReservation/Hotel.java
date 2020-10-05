@@ -17,9 +17,37 @@ public class Hotel {
 	private String name;
 	private int weekDayPrice;
 	private int weekEndPrice;
+	private int rewardCustomerWeekDayPrice;
+	private int rewardCustomerWeekEndPrice;
+	/**
+	 * @return the rewardCustomerWeekDayPrice
+	 */
+	public int getRewardCustomerWeekDayPrice() {
+		return rewardCustomerWeekDayPrice;
+	}
+
+	/**
+	 * @param rewardCustomerWeekDayPrice the rewardCustomerWeekDayPrice to set
+	 */
+	public void setRewardCustomerWeekDayPrice(int rewardCustomerWeekDayPrice) {
+		this.rewardCustomerWeekDayPrice = rewardCustomerWeekDayPrice;
+	}
+
+	/**
+	 * @return the rewardCustomerWeekEndPrice
+	 */
+	public int getRewardCustomerWeekEndPrice() {
+		return rewardCustomerWeekEndPrice;
+	}
+
+	/**
+	 * @param rewardCustomerWeekEndPrice the rewardCustomerWeekEndPrice to set
+	 */
+	public void setRewardCustomerWeekEndPrice(int rewardCustomerWeekEndPrice) {
+		this.rewardCustomerWeekEndPrice = rewardCustomerWeekEndPrice;
+	}
+
 	private int rating;
-	private int weekDays;
-	private int weekEnds;
 
 	/**
 	 * @param name
@@ -32,39 +60,6 @@ public class Hotel {
 		this.weekDayPrice = weekDayPrice;
 		this.weekEndPrice = weekEndPrice;
 	}
-
-	
-	/**
-	 * @return the weekDays
-	 */
-	public int getWeekDays() {
-		return weekDays;
-	}
-
-
-	/**
-	 * @param weekDays the weekDays to set
-	 */
-	public void setWeekDays(int weekDays) {
-		this.weekDays = weekDays;
-	}
-
-
-	/**
-	 * @return the weekEnds
-	 */
-	public int getWeekEnds() {
-		return weekEnds;
-	}
-
-
-	/**
-	 * @param weekEnds the weekEnds to set
-	 */
-	public void setWeekEnds(int weekEnds) {
-		this.weekEnds = weekEnds;
-	}
-
 
 	/**
 	 * @return the rating
