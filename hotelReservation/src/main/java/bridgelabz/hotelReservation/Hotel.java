@@ -10,6 +10,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
@@ -148,22 +149,14 @@ class HotelChain {
 		if (hotelsList.size() == 0)
 			return null;
 		int minPrice;
-		List<Hotel> minTotalPrice = new ArrayList<>();
+		List<Hotel> minTotalPrice = null;
 		if(k == 0) {
 			minPrice = (Integer)hotelsList.stream().map(t-> t.getWeekDayPrice()*weekdays+ t.getWeekEndPrice()*weekends).min(new CustomComparator()).get();
-			for (Hotel hotel : hotelsList) {
-				if(hotel.getWeekDayPrice() * weekdays + hotel.getWeekEndPrice() * weekends == minPrice) {
-					minTotalPrice.add(hotel);
-				}
-			}
+			minTotalPrice = hotelsList.stream().filter((t) -> (t.getWeekDayPrice()*weekdays+ t.getWeekDayPrice()*weekends) == minPrice ).collect(Collectors.toList());
 		}
 		else {
 			minPrice = (Integer)hotelsList.stream().map(t-> t.getRewardCustomerWeekDayPrice()*weekdays+ t.getRewardCustomerWeekEndPrice()*weekends).min(new CustomComparator()).get();
-			for (Hotel hotel : hotelsList) {
-				if(hotel.getRewardCustomerWeekDayPrice()* weekdays + hotel.getRewardCustomerWeekEndPrice() * weekends == minPrice) {
-					minTotalPrice.add(hotel);
-				}
-			}
+			minTotalPrice = hotelsList.stream().filter((t) -> t.getRewardCustomerWeekDayPrice()*weekdays+ t.getRewardCustomerWeekEndPrice()*weekends == minPrice ).collect(Collectors.toList());
 		}		
 		return minTotalPrice;
 	}
@@ -223,12 +216,9 @@ class HotelChain {
 		List<Hotel> listOfHotelMinPrice = this.findCheapestHotel(weekdays, weekends,k);
 		if(listOfHotelMinPrice == null)
 			return false;
-		List<Hotel> minPriceHighestRating = new ArrayList();
+		List<Hotel> minPriceHighestRating = null;
 		Integer max = listOfHotelMinPrice.stream().map(t -> t.getRating()).max(Integer::compare).get();
-		for(Hotel hotel : listOfHotelMinPrice) {
-			if(hotel.getRating() == max)
-				minPriceHighestRating.add(hotel);
-		}
+		minPriceHighestRating = listOfHotelMinPrice.stream().filter(t -> t.getRating()==max).collect(Collectors.toList());
 		for(Hotel hotel : minPriceHighestRating)
 			System.out.println(hotel.getName() + ", rating " + hotel.getRating() + " and Total Rates " + 
 					(weekdays*hotel.getRewardCustomerWeekDayPrice() + weekends*hotel.getRewardCustomerWeekEndPrice()));
@@ -239,19 +229,16 @@ class HotelChain {
 		if(hotelsList == null)
 			return false;
 		int max = this.hotelsList.stream().map(m -> m.getRating()).max(new CustomComparator()).get();
-		Hotel minPriceHighestRating = null;
-		for(Hotel hotel : this.hotelsList)
-			if(hotel.getRating() == max) {
-				minPriceHighestRating = hotel;
-				break;
-			}
+		List<Hotel> minPriceHighestRating = null;
+		minPriceHighestRating = hotelsList.stream().filter(t -> t.getRating() == max).collect(Collectors.toList());
 		List<Integer> weekDaysAndWeekEnds = getWeekDaysAndWeekEnds();
 		if(weekDaysAndWeekEnds == null)
 			return false;
 		int weekdays = weekDaysAndWeekEnds.get(0);
 		int weekends = weekDaysAndWeekEnds.get(1);
-		System.out.println("Hotel Name : " + minPriceHighestRating.getName()
-							+ "\nPrice : " + (weekdays*minPriceHighestRating.getWeekDayPrice() + weekends*minPriceHighestRating.getWeekEndPrice()));
+		for(Hotel hotel : minPriceHighestRating)
+		System.out.println("Hotel Name : " + hotel.getName()
+							+ "\nPrice : " + (weekdays*hotel.getWeekDayPrice() + weekends*hotel.getWeekEndPrice()));
 		return true;
 	}
 }
