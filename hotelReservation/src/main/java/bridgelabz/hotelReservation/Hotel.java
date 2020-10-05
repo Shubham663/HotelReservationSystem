@@ -16,6 +16,7 @@ public class Hotel {
 	private String name;
 	private int weekDayPrice;
 	private int weekEndPrice;
+	private int rating;
 
 	/**
 	 * @param name
@@ -28,6 +29,23 @@ public class Hotel {
 		this.weekDayPrice = weekDayPrice;
 		this.weekEndPrice = weekEndPrice;
 	}
+
+	
+	/**
+	 * @return the rating
+	 */
+	public int getRating() {
+		return rating;
+	}
+
+
+	/**
+	 * @param rating the rating to set
+	 */
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
 
 	/**
 	 * @return the name
