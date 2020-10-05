@@ -24,15 +24,15 @@ public class HotelReservationTest
 	
     @Test
     public void addHotelTest(){
-    	Hotel hotel = new Hotel("Lakewood", 100);
+    	Hotel hotel = new Hotel("Lakewood", 100,80);
     	assertTrue( "Execution terminated", hotelChain.addHotel(hotel) );
     }
     
     @Test
     public void cheapestHotelTest_returnsHotel() {
-    	Hotel LakeWood = new Hotel("LakeWood", 110);
-    	Hotel BridgeWood = new Hotel("BridgeWood",160);
-    	Hotel RidgeWood = new Hotel("RidgeWood",220);
+    	Hotel LakeWood = new Hotel("LakeWood", 110,90);
+    	Hotel BridgeWood = new Hotel("BridgeWood",150,50);
+    	Hotel RidgeWood = new Hotel("RidgeWood",220,150);
     	hotelChain.addHotel(LakeWood);
     	hotelChain.addHotel(BridgeWood);
     	hotelChain.addHotel(RidgeWood);

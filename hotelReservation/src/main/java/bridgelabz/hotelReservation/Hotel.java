@@ -13,18 +13,20 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 public class Hotel{
 	private String name;
-	private int priceRegularCustomer;
-	
+	private int weekDayPrice;
+	private int weekEndPrice;
 	
 	
 	/**
 	 * @param name
-	 * @param priceRegularCustomer
+	 * @param weekDayPrice
+	 * @param weekEndPrice
 	 */
-	public Hotel(String name, int priceRegularCustomer) {
+	public Hotel(String name, int weekDayPrice, int weekEndPrice) {
 		super();
 		this.name = name;
-		this.priceRegularCustomer = priceRegularCustomer;
+		this.weekDayPrice = weekDayPrice;
+		this.weekEndPrice = weekEndPrice;
 	}
 	/**
 	 * @return the name
@@ -38,23 +40,36 @@ public class Hotel{
 	public void setName(String name) {
 		this.name = name;
 	}
-	/**
-	 * @return the priceRegularCustomer
-	 */
-	public int getPriceRegularCustomer() {
-		return priceRegularCustomer;
-	}
-	/**
-	 * @param priceRegularCustomer the priceRegularCustomer to set
-	 */
-	public void setPriceRegularCustomer(int priceRegularCustomer) {
-		this.priceRegularCustomer = priceRegularCustomer;
-	}
 	
+	/**
+	 * @return the weekDayPrice
+	 */
+	public int getWeekDayPrice() {
+		return weekDayPrice;
+	}
+	/**
+	 * @param weekDayPrice the weekDayPrice to set
+	 */
+	public void setWeekDayPrice(int weekDayPrice) {
+		this.weekDayPrice = weekDayPrice;
+	}
+	/**
+	 * @return the weekEndPrice
+	 */
+	public int getWeekEndPrice() {
+		return weekEndPrice;
+	}
+	/**
+	 * @param weekEndPrice the weekEndPrice to set
+	 */
+	public void setWeekEndPrice(int weekEndPrice) {
+		this.weekEndPrice = weekEndPrice;
+	}
 	@Override
 	public String toString() {
-	return ("\n\nName of hotel :" + name
-			+ "\nprice for regular customer " + priceRegularCustomer);
+	return ("\n\nName of hotel : " + name
+			+ "\nweekend price : " + weekEndPrice
+			+ "\nweekday price : " + weekDayPrice);
 	}
 	
 }
@@ -76,7 +91,7 @@ class HotelChain{
 			return null;
 		Hotel returnedHotel = hotelsList.get(0);
 		for(Hotel hotel : hotelsList) {
-			returnedHotel = returnedHotel.getPriceRegularCustomer() < hotel.getPriceRegularCustomer()? returnedHotel:hotel;
+			returnedHotel = returnedHotel.getWeekDayPrice() < hotel.getWeekDayPrice() ? returnedHotel:hotel;
 		}
 		return returnedHotel;	
 	}
@@ -101,7 +116,7 @@ class HotelChain{
 		long difference_In_Days = TimeUnit.MILLISECONDS.toDays(difference_In_Time)% 365;
 		Hotel hotel = this.findCheapestHotel();
 		System.out.println("Hotel : " + hotel.getName()
-				+ "\nTotal Rates : " +hotel.getPriceRegularCustomer()*difference_In_Days);
+				+ "\nTotal Rates : " +hotel.getWeekDayPrice()*difference_In_Days);
 		return true;
 	}
 }

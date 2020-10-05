@@ -17,9 +17,9 @@ public class HotelReservations
 	
     public static void main( String[] args ){
     	System.out.println("Welcome to Hotel Reservation Program");
-    	Hotel LakeWood = new Hotel("LakeWood", 110);
-    	Hotel BridgeWood = new Hotel("BridgeWood",160);
-    	Hotel RidgeWood = new Hotel("RidgeWood",220);
+    	Hotel LakeWood = new Hotel("LakeWood", 110,90);
+    	Hotel BridgeWood = new Hotel("BridgeWood",150,50);
+    	Hotel RidgeWood = new Hotel("RidgeWood",220,150);
     	HotelChain hotelChain = new HotelChain();
     	hotelChain.addHotel(LakeWood);
     	hotelChain.addHotel(BridgeWood);
