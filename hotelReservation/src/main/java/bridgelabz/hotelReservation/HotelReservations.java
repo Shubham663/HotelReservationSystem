@@ -17,9 +17,9 @@ public class HotelReservations
 	
     public static void main( String[] args ){
     	System.out.println("Welcome to Hotel Reservation Program");
-    	Hotel LakeWood = new Hotel("LakeWood", 110,90);
-    	Hotel BridgeWood = new Hotel("BridgeWood",150,50);
-    	Hotel RidgeWood = new Hotel("RidgeWood",220,150);
+    	Hotel LakeWood = new Hotel("LakeWood", 110,90,80,80);
+    	Hotel BridgeWood = new Hotel("BridgeWood",150,50,110,50);
+    	Hotel RidgeWood = new Hotel("RidgeWood",220,150,100,40);
     	LakeWood.setRating(3);
     	BridgeWood.setRating(4);
     	RidgeWood.setRating(5);
@@ -28,6 +28,6 @@ public class HotelReservations
     	hotelChain.addHotel(BridgeWood);
     	hotelChain.addHotel(RidgeWood);
     	
-    	hotelChain.bookCheapest();
+    	hotelChain.bookCheapest(0);
     }
 }
