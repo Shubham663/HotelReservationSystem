@@ -20,6 +20,12 @@ public class HotelReservationTest
 	@Before
 	public void init() {
 		hotelChain = new HotelChain();
+		Hotel LakeWood = new Hotel("LakeWood", 110,90);
+    	Hotel BridgeWood = new Hotel("BridgeWood",150,50);
+    	Hotel RidgeWood = new Hotel("RidgeWood",220,150);
+    	hotelChain.addHotel(LakeWood);
+    	hotelChain.addHotel(BridgeWood);
+    	hotelChain.addHotel(RidgeWood);
 	}
 	
     @Test
@@ -29,18 +35,18 @@ public class HotelReservationTest
     }
     
     @Test
-    public void cheapestHotelTest_returnsHotel() {
-    	Hotel LakeWood = new Hotel("LakeWood", 110,90);
-    	Hotel BridgeWood = new Hotel("BridgeWood",150,50);
-    	Hotel RidgeWood = new Hotel("RidgeWood",220,150);
-    	hotelChain.addHotel(LakeWood);
-    	hotelChain.addHotel(BridgeWood);
-    	hotelChain.addHotel(RidgeWood);
+    public void cheapestHotelTest_ReturnsTrue() {
     	assertTrue("No hotels exist inside the hotel chain ",hotelChain.bookCheapest());
     }
     
     @Test
-    public void cheapestHotelTest_returnsNull() {
-    	assertNull("No hotels exist inside the hotel chain ",hotelChain.findCheapestHotel());
+    public void cheapestHotelTest_ReturnsNull() {
+    	HotelChain hChain = new HotelChain();
+    	assertNull("No hotels exist inside the hotel chain ",hChain.findCheapestHotel(1,2));
+    }
+    
+    @Test
+    public void cheapestHotelDateRange_ReturnsTrue() {
+    	assertTrue("no hotels exist in the hotel chain",hotelChain.bookCheapest());
     }
 }
