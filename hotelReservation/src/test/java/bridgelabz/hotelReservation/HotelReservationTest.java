@@ -57,4 +57,9 @@ public class HotelReservationTest
     public void cheapestHotel_HighestRating_DateRange_ReturnsTrue() {
     	assertTrue("no hotels exist in the hotel chain",hotelChain.bookCheapestWithHighestRating());
     }
+    
+    @Test
+    public void bestRatingHotel_ReturnsTrue() {
+    	assertTrue("no hotels exist in the hotel chain",hotelChain.bestRatingHotel());
+    }
 }

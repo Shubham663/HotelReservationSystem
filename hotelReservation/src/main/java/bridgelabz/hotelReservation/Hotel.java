@@ -1,5 +1,6 @@
 package bridgelabz.hotelReservation;
 
+import java.nio.file.StandardWatchEventKinds;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -216,6 +217,26 @@ class HotelChain {
 		}
 		for(Hotel hotel : minPriceHighestRating)
 			System.out.println(hotel);
+		return true;
+	}
+	
+	public boolean bestRatingHotel() {
+		if(hotelsList == null)
+			return false;
+		int max = this.hotelsList.stream().map(m -> m.getRating()).max(new CustomComparator()).get();
+		Hotel minPriceHighestRating = null;
+		for(Hotel hotel : this.hotelsList)
+			if(hotel.getRating() == max) {
+				minPriceHighestRating = hotel;
+				break;
+			}
+		List<Integer> weekDaysAndWeekEnds = getWeekDaysAndWeekEnds();
+		if(weekDaysAndWeekEnds == null)
+			return false;
+		int weekdays = weekDaysAndWeekEnds.get(0);
+		int weekends = weekDaysAndWeekEnds.get(1);
+		System.out.println("Hotel Name : " + minPriceHighestRating.getName()
+							+ "\nPrice : " + (weekdays*minPriceHighestRating.getWeekDayPrice() + weekends*minPriceHighestRating.getWeekEndPrice()));
 		return true;
 	}
 }
