@@ -134,9 +134,16 @@ public class Hotel {
 class HotelChain {
 	List<Hotel> hotelsList = new ArrayList<Hotel>();
 
+	public List<Hotel> getHotelsList() {
+		return hotelsList;
+	}
+
+	public void setHotelsList(List<Hotel> hotelsList) {
+		this.hotelsList = hotelsList;
+	}
+
 	public boolean addHotel(Hotel hotel) {
 		this.hotelsList.add(hotel);
-//		System.out.println("Hotel added succesfully");
 		return true;
 	}
 
@@ -146,8 +153,10 @@ class HotelChain {
 	}
 
 	public List<Hotel> findCheapestHotel(int weekdays, int weekends, int k) {
-		if (hotelsList.size() == 0)
+		if (hotelsList.size() == 0){
+			System.out.println("The hotel chain does not consist of any hotels");
 			return null;
+		}
 		int minPrice;
 		List<Hotel> minTotalPrice = null;
 		if (k == 0) {
@@ -155,7 +164,7 @@ class HotelChain {
 					.map(t -> t.getWeekDayPrice() * weekdays + t.getWeekEndPrice() * weekends)
 					.min(new CustomComparator()).get();
 			minTotalPrice = hotelsList.stream()
-					.filter((t) -> (t.getWeekDayPrice() * weekdays + t.getWeekDayPrice() * weekends) == minPrice)
+					.filter((t) -> (t.getWeekDayPrice() * weekdays + t.getWeekEndPrice() * weekends) == minPrice)
 					.collect(Collectors.toList());
 		} else {
 			minPrice = (Integer) hotelsList.stream().map(
@@ -182,6 +191,7 @@ class HotelChain {
 			date1 = dateFormat.parse(start);
 			date2 = dateFormat.parse(end);
 		} catch (ParseException e) {
+			System.out.println("date parsing error");
 			e.printStackTrace();
 			return null;
 		}
@@ -210,21 +220,23 @@ class HotelChain {
 		int weekdays = weekDaysAndWeekEnds.get(0);
 		int weekends = weekDaysAndWeekEnds.get(1);
 		List<Hotel> listOfHotelMinPrice = this.findCheapestHotel(weekdays, weekends, k);
+		if(listOfHotelMinPrice == null)
+			return null;
 		for (Hotel hotel : listOfHotelMinPrice)
 			System.out.println(hotel.getName() + ", Total Rates: "
 					+ (hotel.getWeekDayPrice() * weekdays + hotel.getWeekEndPrice() * weekends));
 		return listOfHotelMinPrice;
 	}
 
-	public boolean bookCheapestWithHighestRating(int k) {
+	public List<Hotel> bookCheapestWithHighestRating(int k) {
 		List<Integer> weekDaysAndWeekEnds = getWeekDaysAndWeekEnds();
 		if (weekDaysAndWeekEnds == null)
-			return false;
+			return null;
 		int weekdays = weekDaysAndWeekEnds.get(0);
 		int weekends = weekDaysAndWeekEnds.get(1);
 		List<Hotel> listOfHotelMinPrice = this.findCheapestHotel(weekdays, weekends, k);
 		if (listOfHotelMinPrice == null)
-			return false;
+			return null;
 		List<Hotel> minPriceHighestRating = null;
 		Integer max = listOfHotelMinPrice.stream().map(t -> t.getRating()).max(Integer::compare).get();
 		minPriceHighestRating = listOfHotelMinPrice.stream().filter(t -> t.getRating() == max)
@@ -233,23 +245,25 @@ class HotelChain {
 			System.out.println(hotel.getName() + ", rating " + hotel.getRating() + " and Total Rates "
 					+ (weekdays * hotel.getRewardCustomerWeekDayPrice()
 							+ weekends * hotel.getRewardCustomerWeekEndPrice()));
-		return true;
+		return minPriceHighestRating;
 	}
 
-	public boolean bestRatingHotel() {
-		if (hotelsList == null)
-			return false;
+	public List<Hotel> bestRatingHotel() {
+		if (hotelsList == null) {
+			System.out.println("No hotels present in hotel chain");
+			return null;
+		}
 		int max = this.hotelsList.stream().map(m -> m.getRating()).max(new CustomComparator()).get();
 		List<Hotel> minPriceHighestRating = null;
 		minPriceHighestRating = hotelsList.stream().filter(t -> t.getRating() == max).collect(Collectors.toList());
 		List<Integer> weekDaysAndWeekEnds = getWeekDaysAndWeekEnds();
 		if (weekDaysAndWeekEnds == null)
-			return false;
+			return null;
 		int weekdays = weekDaysAndWeekEnds.get(0);
 		int weekends = weekDaysAndWeekEnds.get(1);
 		for (Hotel hotel : minPriceHighestRating)
 			System.out.println("Hotel Name : " + hotel.getName() + "\nPrice : "
 					+ (weekdays * hotel.getWeekDayPrice() + weekends * hotel.getWeekEndPrice()));
-		return true;
+		return minPriceHighestRating;
 	}
 }
