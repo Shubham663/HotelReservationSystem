@@ -20,6 +20,7 @@ public class Hotel {
 	private int weekEndPrice;
 	private int rewardCustomerWeekDayPrice;
 	private int rewardCustomerWeekEndPrice;
+
 	/**
 	 * @return the rewardCustomerWeekDayPrice
 	 */
@@ -55,7 +56,8 @@ public class Hotel {
 	 * @param weekDayPrice
 	 * @param weekEndPrice
 	 */
-	public Hotel(String name, int weekDayPrice, int weekEndPrice,int rewardCustomerWeekDayPrice, int rewardCustomerWeekEndPrice) {
+	public Hotel(String name, int weekDayPrice, int weekEndPrice, int rewardCustomerWeekDayPrice,
+			int rewardCustomerWeekEndPrice) {
 		super();
 		this.name = name;
 		this.weekDayPrice = weekDayPrice;
@@ -71,14 +73,12 @@ public class Hotel {
 		return rating;
 	}
 
-
 	/**
 	 * @param rating the rating to set
 	 */
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
-
 
 	/**
 	 * @return the name
@@ -145,29 +145,35 @@ class HotelChain {
 		return this.hotelsList.toString();
 	}
 
-	public List<Hotel> findCheapestHotel(int weekdays, int weekends,int k) {
+	public List<Hotel> findCheapestHotel(int weekdays, int weekends, int k) {
 		if (hotelsList.size() == 0)
 			return null;
 		int minPrice;
 		List<Hotel> minTotalPrice = null;
-		if(k == 0) {
-			minPrice = (Integer)hotelsList.stream().map(t-> t.getWeekDayPrice()*weekdays+ t.getWeekEndPrice()*weekends).min(new CustomComparator()).get();
-			minTotalPrice = hotelsList.stream().filter((t) -> (t.getWeekDayPrice()*weekdays+ t.getWeekDayPrice()*weekends) == minPrice ).collect(Collectors.toList());
+		if (k == 0) {
+			minPrice = (Integer) hotelsList.stream()
+					.map(t -> t.getWeekDayPrice() * weekdays + t.getWeekEndPrice() * weekends)
+					.min(new CustomComparator()).get();
+			minTotalPrice = hotelsList.stream()
+					.filter((t) -> (t.getWeekDayPrice() * weekdays + t.getWeekDayPrice() * weekends) == minPrice)
+					.collect(Collectors.toList());
+		} else {
+			minPrice = (Integer) hotelsList.stream().map(
+					t -> t.getRewardCustomerWeekDayPrice() * weekdays + t.getRewardCustomerWeekEndPrice() * weekends)
+					.min(new CustomComparator()).get();
+			minTotalPrice = hotelsList.stream().filter((t) -> t.getRewardCustomerWeekDayPrice() * weekdays
+					+ t.getRewardCustomerWeekEndPrice() * weekends == minPrice).collect(Collectors.toList());
 		}
-		else {
-			minPrice = (Integer)hotelsList.stream().map(t-> t.getRewardCustomerWeekDayPrice()*weekdays+ t.getRewardCustomerWeekEndPrice()*weekends).min(new CustomComparator()).get();
-			minTotalPrice = hotelsList.stream().filter((t) -> t.getRewardCustomerWeekDayPrice()*weekdays+ t.getRewardCustomerWeekEndPrice()*weekends == minPrice ).collect(Collectors.toList());
-		}		
 		return minTotalPrice;
 	}
-	
-	public List<Integer> getWeekDaysAndWeekEnds(){
+
+	public List<Integer> getWeekDaysAndWeekEnds() {
 		List<Integer> returnedList = new ArrayList();
 		Scanner sc = new Scanner(System.in);
 		int weekdays = 0, weekends = 0;
 		Date date1 = null;
 		Date date2 = null;
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		System.out.println("Enter the start day of your stay");
 		String start = sc.nextLine();
 		System.out.println("Enter the end day of your stay");
@@ -183,12 +189,12 @@ class HotelChain {
 		startCalendar.setTime(date1);
 		Calendar endCalendar = Calendar.getInstance();
 		endCalendar.setTime(date2);
-		for (Date date = startCalendar.getTime(); startCalendar.before(endCalendar); startCalendar.add(Calendar.DATE,
-				1), date = startCalendar.getTime()) {
+		for (Date date = startCalendar.getTime(); startCalendar.before(endCalendar)
+				|| startCalendar.equals(endCalendar); startCalendar.add(Calendar.DATE,
+						1), date = startCalendar.getTime()) {
 			if ((date.getDay() + 1 == Calendar.SATURDAY) || (date.getDay() + 1 == Calendar.SUNDAY)) {
 				weekends++;
-			} 
-			else {
+			} else {
 				weekdays++;
 			}
 		}
@@ -199,46 +205,51 @@ class HotelChain {
 
 	public List<Hotel> bookCheapest(int k) {
 		List<Integer> weekDaysAndWeekEnds = getWeekDaysAndWeekEnds();
-		if(weekDaysAndWeekEnds == null)
+		if (weekDaysAndWeekEnds == null)
 			return null;
 		int weekdays = weekDaysAndWeekEnds.get(0);
 		int weekends = weekDaysAndWeekEnds.get(1);
-		List<Hotel> listOfHotelMinPrice = this.findCheapestHotel(weekdays, weekends,k);
+		List<Hotel> listOfHotelMinPrice = this.findCheapestHotel(weekdays, weekends, k);
+		for (Hotel hotel : listOfHotelMinPrice)
+			System.out.println(hotel.getName() + ", Total Rates: "
+					+ (hotel.getWeekDayPrice() * weekdays + hotel.getWeekEndPrice() * weekends));
 		return listOfHotelMinPrice;
 	}
-	
+
 	public boolean bookCheapestWithHighestRating(int k) {
 		List<Integer> weekDaysAndWeekEnds = getWeekDaysAndWeekEnds();
-		if(weekDaysAndWeekEnds == null)
+		if (weekDaysAndWeekEnds == null)
 			return false;
 		int weekdays = weekDaysAndWeekEnds.get(0);
 		int weekends = weekDaysAndWeekEnds.get(1);
-		List<Hotel> listOfHotelMinPrice = this.findCheapestHotel(weekdays, weekends,k);
-		if(listOfHotelMinPrice == null)
+		List<Hotel> listOfHotelMinPrice = this.findCheapestHotel(weekdays, weekends, k);
+		if (listOfHotelMinPrice == null)
 			return false;
 		List<Hotel> minPriceHighestRating = null;
 		Integer max = listOfHotelMinPrice.stream().map(t -> t.getRating()).max(Integer::compare).get();
-		minPriceHighestRating = listOfHotelMinPrice.stream().filter(t -> t.getRating()==max).collect(Collectors.toList());
-		for(Hotel hotel : minPriceHighestRating)
-			System.out.println(hotel.getName() + ", rating " + hotel.getRating() + " and Total Rates " + 
-					(weekdays*hotel.getRewardCustomerWeekDayPrice() + weekends*hotel.getRewardCustomerWeekEndPrice()));
+		minPriceHighestRating = listOfHotelMinPrice.stream().filter(t -> t.getRating() == max)
+				.collect(Collectors.toList());
+		for (Hotel hotel : minPriceHighestRating)
+			System.out.println(hotel.getName() + ", rating " + hotel.getRating() + " and Total Rates "
+					+ (weekdays * hotel.getRewardCustomerWeekDayPrice()
+							+ weekends * hotel.getRewardCustomerWeekEndPrice()));
 		return true;
 	}
-	
+
 	public boolean bestRatingHotel() {
-		if(hotelsList == null)
+		if (hotelsList == null)
 			return false;
 		int max = this.hotelsList.stream().map(m -> m.getRating()).max(new CustomComparator()).get();
 		List<Hotel> minPriceHighestRating = null;
 		minPriceHighestRating = hotelsList.stream().filter(t -> t.getRating() == max).collect(Collectors.toList());
 		List<Integer> weekDaysAndWeekEnds = getWeekDaysAndWeekEnds();
-		if(weekDaysAndWeekEnds == null)
+		if (weekDaysAndWeekEnds == null)
 			return false;
 		int weekdays = weekDaysAndWeekEnds.get(0);
 		int weekends = weekDaysAndWeekEnds.get(1);
-		for(Hotel hotel : minPriceHighestRating)
-		System.out.println("Hotel Name : " + hotel.getName()
-							+ "\nPrice : " + (weekdays*hotel.getWeekDayPrice() + weekends*hotel.getWeekEndPrice()));
+		for (Hotel hotel : minPriceHighestRating)
+			System.out.println("Hotel Name : " + hotel.getName() + "\nPrice : "
+					+ (weekdays * hotel.getWeekDayPrice() + weekends * hotel.getWeekEndPrice()));
 		return true;
 	}
 }
